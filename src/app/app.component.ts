@@ -10,7 +10,7 @@ export class AppComponent {
   title = 'blott';
   rowData: any[] = [
     {
-      CCY1: 'AUD',
+      CCY1: 'USD',
       CCY2: 'GBP',
       Buy_Rate: 90,
       Sell_Rate: 70,
@@ -22,7 +22,7 @@ export class AppComponent {
     },
     {
       CCY1: 'AUD',
-      CCY2: 'GBP',
+      CCY2: 'EUR',
       Buy_Rate: 80,
       Sell_Rate: 60,
       Buy_Offer: '20%',
@@ -32,7 +32,7 @@ export class AppComponent {
       Date: '14-12-2022',
     },
     {
-      CCY1: 'AUD',
+      CCY1: 'EUR',
       CCY2: 'GBP',
       Buy_Rate: 70,
       Sell_Rate: 50,
