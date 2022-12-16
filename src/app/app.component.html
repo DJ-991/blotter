@@ -1,85 +1,88 @@
 <nav class="navbar navbar-dark bg-dark">
-  <div class="container-fluid">
-    <span class="navbar-brand mb-0 h1">Blotter</span>
-  </div>
+	<div class="container-fluid">
+		<span class="navbar-brand mb-0 h1">
+			Blotter
+		</span>
+	</div>
 </nav>
 
 <div class="container text-center">
-  <div class="row">
-    <div class="col">
-      <br />
-      <br />
-      <form class="d-flex" role="search">
-        <input
-          class="form-control me-2"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-        />
-        <button class="btn btn-outline-success" type="submit">Find</button>
-      </form>
-    </div>
-    <div class="col">
-      <br />
-      <br/>
-      <button type="button" class="btn btn-light">Go</button>
-    </div>
-    <div class="col">
-      <br />
-      <div>Select the CCY Pair:</div>
-      <div class="dropdown">
-        <button
-          class="btn dropdown-toggle"
-          type="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          CCY1
-        </button>
-        <ul class="dropdown-menu">
-          <li><button class="dropdown-item" type="button">USD</button></li>
-          <li><button class="dropdown-item" type="button">EUR</button></li>
-          <li><button class="dropdown-item" type="button">GBP</button></li>
-          <li><button class="dropdown-item" type="button">AUD</button></li>
-        </ul>
-      </div>
-    </div>
-    <div class="col">
-      <br />
-      <br/>
-      <div class="dropdown">
-        <button
-          class="btn dropdown-toggle"
-          type="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          CCY2
-        </button>
-        <ul class="dropdown-menu">
-          <li><button class="dropdown-item" type="button">USD</button></li>
-          <li><button class="dropdown-item" type="button">EUR</button></li>
-          <li><button class="dropdown-item" type="button">GBP</button></li>
-          <li><button class="dropdown-item" type="button">AUD</button></li>
-        </ul>
-      </div>
-    </div>
-    <div class="col">
-      <br />
-      <br/>
-      <button type="button" class="btn btn-light">Add</button>
-    </div>
-  </div>
+	<div class="row">
+		<div class="col">
+			<br />
+			<br />
+			<form class="d-flex" role="search">
+				<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+				<button class="btn btn-outline-success" type="submit">
+					Find
+				</button>
+			</form>
+		</div>
+		<div class="col">
+			<br />
+			<br />
+			<button type="button" class="btn btn-light">
+				Go
+			</button>
+		</div>
+		<div class="col">
+			<br />
+			<div>
+				Select the CCY Pair:
+			</div>
+			<div class="dropdown">
+				<button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+					CCY1
+				</button>
+				<ul class="dropdown-menu">
+					<li><button class="dropdown-item" type="button">USD</button></li>
+					<li><button class="dropdown-item" type="button">EUR</button></li>
+					<li><button class="dropdown-item" type="button">GBP</button></li>
+					<li><button class="dropdown-item" type="button">AUD</button></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col">
+			<br />
+			<br />
+			<div class="dropdown">
+				<button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+					CCY2
+				</button>
+				<ul class="dropdown-menu">
+					<li><button class="dropdown-item" type="button">USD</button></li>
+					<li><button class="dropdown-item" type="button">EUR</button></li>
+					<li><button class="dropdown-item" type="button">GBP</button></li>
+					<li><button class="dropdown-item" type="button">AUD</button></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col">
+			<br />
+			<br />
+			<button type="button" class="btn btn-light">Add</button>
+		</div>
+	</div>
 </div>
 
 <!-- Body -->
 <div class="container-fluid">
-  <br />
-  <ag-grid-angular
-    style="width: 100%; height: 250px"
-    class="ag-theme-alpine"
-    [rowData]="rowData"
-    [columnDefs]="colDefs"
-  ></ag-grid-angular>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="d-flex justify-content-end">
+				<button (click)="onBtExport()" type="submit" class="btn btn-outline-success">
+					Export as csv
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<br />
+	<ag-grid-angular style="width: 100%; height: 250px" class="ag-theme-alpine" [rowData]="rowData"
+		(cellValueChanged)="onCellValueChanged($event)" [getRowId]="getRowId" [readOnlyEdit]="true"
+		(cellEditRequest)="onCellEditRequest($event)" [columnDefs]="colDefs" [excelStyles]="excelStyles"
+		(gridReady)="onGridReady($event)"></ag-grid-angular>
 </div>
+
 <!-- Body -->

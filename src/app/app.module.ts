@@ -12,4 +12,4 @@ import { AgGridModule } from 'ag-grid-angular';
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
