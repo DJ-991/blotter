@@ -24,6 +24,7 @@ export class AppComponent {
   rowImmutableStore: any = [];
   public getRowId: GetRowIdFunc = (params: GetRowIdParams) => params.data.id;
   searchValue: boolean = true;
+  dateValue: boolean = true;
 
   dropDownList: any = [
     {
@@ -359,11 +360,19 @@ export class AppComponent {
   }
 
   /** Input change event */
-  onSearchChange(searchValue: string): void {
-    if (searchValue) {
-      this.searchValue = false;
+  onSearchChange(searchValue: string, type: any): void {
+    if (type == 'text') {
+      if (searchValue) {
+        this.searchValue = false;
+      } else {
+        this.searchValue = true;
+      }
     } else {
-      this.searchValue = true;
+      if (searchValue) {
+        this.dateValue = false;
+      } else {
+        this.dateValue = true;
+      }
     }
   }
 }

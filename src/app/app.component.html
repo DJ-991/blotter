@@ -17,19 +17,26 @@
 				Search:
 			</p>
 			<div class="row text-center">
-				<div class="col-md-4">
-					<input class="form-control" [(ngModel)]="searchBox" (ngModelChange)="onSearchChange($event)"
-						name="searchBox" id="filter-text-box" type="text" placeholder="Enter value"
-						(input)="onFilterTextBoxChanged()" aria-label="default input example">
+				<div class="col-md-5">
+					<div class="d-flex">
+						<input class="form-control" [(ngModel)]="searchBox"
+							(ngModelChange)="onSearchChange($event,'text')" name="searchBox" id="filter-text-box"
+							type="text" placeholder="Enter value" (input)="onFilterTextBoxChanged()"
+							aria-label="default input example">
+						<button type="submit" class="btn btn-success me-3" (click)="ongoFilter()"
+							[disabled]="searchValue">Search</button>
+					</div>
 				</div>
-				<div class="col-md-4">
-					<input class="form-control" [(ngModel)]="dateBox" name="dateBox" type="date"
-						(input)="onFilterDateBoxChanged()" (ngModelChange)="onSearchChange($event)" id="datePicker"
-						placeholder="Default input" aria-label="default input example">
+				<div class="col-md-5">
+					<div class="d-flex">
+						<input class="form-control" [(ngModel)]="dateBox" name="dateBox" type="date"
+							(input)="onFilterDateBoxChanged()" (ngModelChange)="onSearchChange($event,'date')"
+							id="datePicker" placeholder="Default input" aria-label="default input example">
+						<button type="submit" class="btn btn-success me-3" (click)="ongoFilter()"
+							[disabled]="dateValue">Go</button>
+					</div>
 				</div>
-				<div class="col-md-4">
-					<button type="submit" class="btn btn-success me-3" (click)="ongoFilter()"
-						[disabled]="searchValue">Go</button>
+				<div class="col-md-2">
 					<button type="submit" (click)="resetSearchForm()" class="btn btn-secondary">Reset</button>
 				</div>
 			</div>
