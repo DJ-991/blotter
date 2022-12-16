@@ -328,18 +328,20 @@ export class AppComponent {
         }
       });
     }
-    else {
-      this.gridApi.setQuickFilter(
-        this.searchBox
-      );
-      this.gridApi.setRowData(rowImmutableStore);
-    }
+    // else {
+    this.gridApi.setQuickFilter(
+      this.searchBox
+    );
+    // this.gridApi.setRowData(rowImmutableStore);
+    // }
   }
 
   /** Reset form */
   resetSearchForm() {
     this.dateBox = null;
     this.searchBox = null;
+    this.searchValue = true;
+    this.dateValue = true;
     this.gridApi.setRowData(this.rowImmutableStore);
     this.gridApi.setQuickFilter(this.searchBox);
   }
