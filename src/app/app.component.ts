@@ -140,9 +140,9 @@ export class AppComponent {
     },
   ];
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   /** Export data in excel */
   onBtExport() {
@@ -304,40 +304,34 @@ export class AppComponent {
   /** When click on go filter */
   ongoFilter() {
     var rowImmutableStore: any = [];
-
     if (this.dateBox && this.searchBox) {
-      this.gridApi.setQuickFilter(this.searchBox);
+      this.gridApi.setQuickFilter(
+        this.searchBox
+      );
       this.rowImmutableStore.filter((item: any) => {
-        console.log(
-          moment(item.Date, 'YYYY/MM/DD').isBefore(
-            moment(this.dateBox, 'YYYY/MM/DD')
-          ),
-          this.dateBox,
-          item.Date
-        );
         if (moment(item.Date).isSameOrBefore(moment(this.dateBox))) {
           rowImmutableStore.push(item);
+          this.gridApi.setRowData(rowImmutableStore);
+        } else {
           this.gridApi.setRowData(rowImmutableStore);
         }
       });
     } else if (this.dateBox) {
       this.rowImmutableStore.filter((item: any) => {
-        console.log(
-          moment(item.Date, 'YYYY/MM/DD').isBefore(
-            moment(this.dateBox, 'YYYY/MM/DD')
-          ),
-          this.dateBox,
-          item.Date
-        );
         if (moment(item.Date).isSameOrBefore(moment(this.dateBox))) {
           rowImmutableStore.push(item);
+          this.gridApi.setRowData(rowImmutableStore);
+        } else {
           this.gridApi.setRowData(rowImmutableStore);
         }
       });
     }
-    // else {
-    this.gridApi.setQuickFilter(this.searchBox);
-    // }
+    else {
+      this.gridApi.setQuickFilter(
+        this.searchBox
+      );
+      this.gridApi.setRowData(rowImmutableStore);
+    }
   }
 
   /** Reset form */
@@ -349,7 +343,7 @@ export class AppComponent {
   }
 
   /** Set data in local storage */
-  setDataInLocalStorage() {}
+  setDataInLocalStorage() { }
 
   /** Get data from localStorage */
   getDataFromLocalStorage() {
