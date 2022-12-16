@@ -23,6 +23,7 @@ export class AppComponent {
   private gridApi!: GridApi;
   rowImmutableStore: any = [];
   public getRowId: GetRowIdFunc = (params: GetRowIdParams) => params.data.id;
+  searchValue: boolean = true;
 
   dropDownList: any = [
     {
@@ -355,5 +356,14 @@ export class AppComponent {
       );
     }
     return this.rowImmutableStore;
+  }
+
+  /** Input change event */
+  onSearchChange(searchValue: string): void {
+    if (searchValue) {
+      this.searchValue = false;
+    } else {
+      this.searchValue = true;
+    }
   }
 }
