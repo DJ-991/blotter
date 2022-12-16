@@ -20,11 +20,9 @@ import * as moment from 'moment';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-
   private gridApi!: GridApi;
   rowImmutableStore: any = [];
   public getRowId: GetRowIdFunc = (params: GetRowIdParams) => params.data.id;
-
 
   dropDownList: any = [
     {
@@ -50,7 +48,6 @@ export class AppComponent {
   searchBox: any = null;
   dateBox: any = null;
 
-
   title = 'blott';
   rowData: any[] = [
     {
@@ -63,7 +60,7 @@ export class AppComponent {
       Sell_Offer: 0,
       Buy_Deal: 0,
       Sell_Deal: 0,
-      Date: new Date("2022-12-5").toLocaleDateString("en-US"),
+      Date: new Date('2022-12-05').toLocaleDateString('en-US'),
     },
     {
       id: 2,
@@ -75,7 +72,7 @@ export class AppComponent {
       Sell_Offer: 0,
       Buy_Deal: 0,
       Sell_Deal: 0,
-      Date: new Date("2022-12-10").toLocaleDateString("en-US"),
+      Date: new Date('2022-12-10').toLocaleDateString('en-US'),
     },
     {
       id: 3,
@@ -87,7 +84,7 @@ export class AppComponent {
       Sell_Offer: 0,
       Buy_Deal: 0,
       Sell_Deal: 0,
-      Date: new Date("2022-12-15").toLocaleDateString("en-US"),
+      Date: new Date('2022-12-15').toLocaleDateString('en-US'),
     },
     {
       id: 4,
@@ -99,7 +96,7 @@ export class AppComponent {
       Sell_Offer: 0,
       Buy_Deal: 0,
       Sell_Deal: 0,
-      Date: new Date("2022-12-16").toLocaleDateString("en-US"),
+      Date: new Date('2022-12-16').toLocaleDateString('en-US'),
     },
   ];
 
@@ -108,12 +105,21 @@ export class AppComponent {
     { field: 'CCY2' },
     { field: 'Buy_Rate', editable: true },
     { field: 'Sell_Rate', editable: true },
-    { field: 'Buy_Offer', editable: true, valueFormatter: this.percentageFormate },
-    { field: 'Sell_Offer', editable: true, valueFormatter: this.percentageFormate },
+    {
+      field: 'Buy_Offer',
+      editable: true,
+      valueFormatter: this.percentageFormate,
+    },
+    {
+      field: 'Sell_Offer',
+      editable: true,
+      valueFormatter: this.percentageFormate,
+    },
     { field: 'Buy_Deal' },
     { field: 'Sell_Deal' },
     {
-      field: 'Date', valueFormatter: function (params) {
+      field: 'Date',
+      valueFormatter: function (params) {
         return moment(params.value).format('DD-MM-YYYY');
       },
     },
@@ -134,14 +140,9 @@ export class AppComponent {
     },
   ];
 
-  constructor() {
+  constructor() {}
 
-  }
-
-
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   /** Export data in excel */
   onBtExport() {
@@ -154,7 +155,7 @@ export class AppComponent {
   }
 
   percentageFormate(params: ValueFormatterParams) {
-    return params.value + '%'
+    return params.value + '%';
   }
 
   formatNumber(number: number) {
@@ -178,36 +179,31 @@ export class AppComponent {
     } else {
       this.rowImmutableStore = this.getDataFromLocalStorage();
       this.rowData = this.rowImmutableStore;
-
     }
-
   }
 
   onCellValueChanged(event: CellValueChangedEvent) {
     console.log('data after changes is: ', event.data);
   }
 
-
   onCellEditRequest(event: CellEditRequestEvent) {
-    console.log("test");
+    console.log('test');
     const data = event.data;
     const field = event.colDef.field;
     const newValue = event.newValue;
     var newItem: any = { ...data };
 
     if (field == 'Buy_Rate') {
-      newItem.Buy_Deal = (newValue * newItem.Buy_Offer.toString()) / 100
+      newItem.Buy_Deal = (newValue * newItem.Buy_Offer.toString()) / 100;
     } else if (field == 'Buy_Offer') {
-      newItem.Buy_Deal = (newValue * newItem.Buy_Rate.toString()) / 100
+      newItem.Buy_Deal = (newValue * newItem.Buy_Rate.toString()) / 100;
     } else if (field == 'Sell_Rate') {
-      newItem.Sell_Deal = (newValue * newItem.Sell_Offer.toString()) / 100
+      newItem.Sell_Deal = (newValue * newItem.Sell_Offer.toString()) / 100;
     } else if (field == 'Sell_Offer') {
-      newItem.Sell_Deal = (newValue * newItem.Sell_Rate.toString()) / 100
-
+      newItem.Sell_Deal = (newValue * newItem.Sell_Rate.toString()) / 100;
     }
 
-    console.log(newItem)
-
+    console.log(newItem);
 
     newItem[field!] = event.newValue;
     console.log('onCellEditRequest, updating ' + field + ' to 00' + newValue);
@@ -216,18 +212,23 @@ export class AppComponent {
     );
     this.gridApi.setRowData(this.rowImmutableStore);
 
-    localStorage.setItem('ag-grid-data', JSON.stringify(this.rowImmutableStore));
+    localStorage.setItem(
+      'ag-grid-data',
+      JSON.stringify(this.rowImmutableStore)
+    );
     this.rowImmutableStore = this.getDataFromLocalStorage();
     this.rowData = this.rowImmutableStore;
   }
-
 
   /** Change event */
   onChange($event: any, type: any) {
     this.dropDownList = this.dropDownList.map((item: any) => {
       if (item.name == $event.target.value) {
         item.disable = true;
-      } else if (this.selectedCCY1 != item.name || this.selectedCCY2 != item.name) {
+      } else if (
+        this.selectedCCY1 != item.name ||
+        this.selectedCCY2 != item.name
+      ) {
         item.disable = false;
       }
       return item;
@@ -236,13 +237,12 @@ export class AppComponent {
 
   /** Add new record */
   addNewRecord() {
-
     if (this.selectedCCY1 != 'select' && this.selectedCCY2 != 'select') {
       let s4 = () => {
         return Math.floor((1 + Math.random()) * 0x10000)
           .toString(16)
           .substring(1);
-      }
+      };
 
       const obj = {
         id: s4(),
@@ -254,21 +254,22 @@ export class AppComponent {
         Sell_Offer: 0,
         Buy_Deal: 0,
         Sell_Deal: 0,
-        Date: new Date().toLocaleDateString("en-US"),
-      }
+        Date: new Date().toLocaleDateString('en-US'),
+      };
 
       this.rowImmutableStore.push(obj);
       this.gridApi.setRowData(this.rowImmutableStore);
       this.resetAddForm();
 
-      localStorage.setItem('ag-grid-data', JSON.stringify(this.rowImmutableStore));
+      localStorage.setItem(
+        'ag-grid-data',
+        JSON.stringify(this.rowImmutableStore)
+      );
       this.rowImmutableStore = this.getDataFromLocalStorage();
       this.rowData = this.rowImmutableStore;
     } else {
-      window.alert("Please select CCY Pair");
+      window.alert('Please select CCY Pair');
     }
-
-
   }
 
   /** Reset form */
@@ -302,14 +303,18 @@ export class AppComponent {
 
   /** When click on go filter */
   ongoFilter() {
-    var rowImmutableStore: any = []
+    var rowImmutableStore: any = [];
 
     if (this.dateBox && this.searchBox) {
-      this.gridApi.setQuickFilter(
-        this.searchBox
-      );
+      this.gridApi.setQuickFilter(this.searchBox);
       this.rowImmutableStore.filter((item: any) => {
-        console.log(moment(item.Date, "YYYY/MM/DD").isBefore(moment(this.dateBox, "YYYY/MM/DD")), this.dateBox, item.Date)
+        console.log(
+          moment(item.Date, 'YYYY/MM/DD').isBefore(
+            moment(this.dateBox, 'YYYY/MM/DD')
+          ),
+          this.dateBox,
+          item.Date
+        );
         if (moment(item.Date).isSameOrBefore(moment(this.dateBox))) {
           rowImmutableStore.push(item);
           this.gridApi.setRowData(rowImmutableStore);
@@ -317,7 +322,13 @@ export class AppComponent {
       });
     } else if (this.dateBox) {
       this.rowImmutableStore.filter((item: any) => {
-        console.log(moment(item.Date, "YYYY/MM/DD").isBefore(moment(this.dateBox, "YYYY/MM/DD")), this.dateBox, item.Date)
+        console.log(
+          moment(item.Date, 'YYYY/MM/DD').isBefore(
+            moment(this.dateBox, 'YYYY/MM/DD')
+          ),
+          this.dateBox,
+          item.Date
+        );
         if (moment(item.Date).isSameOrBefore(moment(this.dateBox))) {
           rowImmutableStore.push(item);
           this.gridApi.setRowData(rowImmutableStore);
@@ -325,9 +336,7 @@ export class AppComponent {
       });
     }
     // else {
-    this.gridApi.setQuickFilter(
-      this.searchBox
-    );
+    this.gridApi.setQuickFilter(this.searchBox);
     // }
   }
 
@@ -339,19 +348,17 @@ export class AppComponent {
     this.gridApi.setQuickFilter(this.searchBox);
   }
 
-
   /** Set data in local storage */
-  setDataInLocalStorage() {
-
-  }
-
+  setDataInLocalStorage() {}
 
   /** Get data from localStorage */
   getDataFromLocalStorage() {
     if (localStorage.getItem('ag-grid-data') === null) {
       this.rowImmutableStore = [];
     } else {
-      this.rowImmutableStore = JSON.parse(localStorage.getItem('ag-grid-data') || '');
+      this.rowImmutableStore = JSON.parse(
+        localStorage.getItem('ag-grid-data') || ''
+      );
     }
     return this.rowImmutableStore;
   }
