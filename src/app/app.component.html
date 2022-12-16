@@ -11,9 +11,9 @@
 <!-- Body -->
 <div class="container-fluid">
 
-	<div class="row mt-5">
-		<div class="col-md-6">
-			<p class="text-center">
+	<div class="row mt-2">
+		<div class="col-md-6 search-section">
+			<p>
 				Search:
 			</p>
 			<div class="row text-center">
@@ -29,14 +29,14 @@
 				</div>
 				<div class="col-md-4">
 					<button type="submit" class="btn btn-success me-3" (click)="ongoFilter()">Go</button>
-					<button type="submit" (click)="resetSearchForm()" class="btn btn-danger">Reset</button>
+					<button type="submit" (click)="resetSearchForm()" class="btn btn-secondary">Reset</button>
 				</div>
 			</div>
 
 		</div>
 
-		<div class="col-md-6">
-			<p class="text-center">
+		<div class="col-md-6 box-border">
+			<p>
 				Select the CCY Pair:
 			</p>
 			<div class="row text-center">
@@ -59,7 +59,7 @@
 				</div>
 				<div class="col-md-4">
 					<button type="submit" (click)="addNewRecord()" class="btn btn-success me-3">Add</button>
-					<button type="submit" (click)="resetSelectedInput()" class="btn btn-danger">Reset</button>
+					<button type="submit" (click)="resetSelectedInput()" class="btn btn-secondary">Reset</button>
 				</div>
 			</div>
 		</div>
@@ -68,7 +68,7 @@
 	<div class="row mt-5">
 		<div class="col-md-12">
 			<div class="d-flex justify-content-end">
-				<button (click)="onBtExport()" type="submit" class="btn btn-outline-success">
+				<button (click)="onBtExport()" type="submit" class="btn btn-info">
 					Export as csv
 				</button>
 			</div>

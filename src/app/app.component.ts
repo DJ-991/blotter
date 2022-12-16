@@ -112,7 +112,11 @@ export class AppComponent {
     { field: 'Sell_Offer', editable: true, valueFormatter: this.percentageFormate },
     { field: 'Buy_Deal' },
     { field: 'Sell_Deal' },
-    { field: 'Date' },
+    {
+      field: 'Date', valueFormatter: function (params) {
+        return moment(params.value).format('DD-MM-YYYY');
+      },
+    },
   ];
 
   // DefaultColDef sets props common to all Columns
@@ -300,26 +304,26 @@ export class AppComponent {
   ongoFilter() {
     var rowImmutableStore: any = []
 
-    // if (this.dateBox && this.searchBox) {
-    //   this.rowImmutableStore.filter((item: any) => {
-    //     if (moment(item.Date, "YYYY/MM/DD").isBefore(moment()) || moment(item.Date, 'YYYY-MM-DD').format('YYYY-MM-DD') == moment(new Date(), 'YYYY-MM-DD').format('YYYY-MM-DD')) {
-    //       rowImmutableStore.push(item);
-    //       this.gridApi.setRowData(rowImmutableStore);
-    //     }
-    //   });
-    // } else if (this.dateBox) {
-    //   this.rowImmutableStore.filter((item: any) => {
-    //     let format: any = new Date(item.Date)
-    //     format = moment(format, 'YYYY/MM/DD').format('YYYY/MM/DD');
-    //     let todayDate: any = new Date()
-    //     todayDate = moment(todayDate, 'YYYY/MM/DD').format('YYYY/MM/DD');
-    //     if (format < todayDate) {
-    //       console.log(item);
-    //       rowImmutableStore.push(item);
-    //       // this.gridApi.setRowData(rowImmutableStore);
-    //     }
-    //   });
-    // }
+    if (this.dateBox && this.searchBox) {
+      this.gridApi.setQuickFilter(
+        this.searchBox
+      );
+      this.rowImmutableStore.filter((item: any) => {
+        console.log(moment(item.Date, "YYYY/MM/DD").isBefore(moment(this.dateBox, "YYYY/MM/DD")), this.dateBox, item.Date)
+        if (moment(item.Date).isSameOrBefore(moment(this.dateBox))) {
+          rowImmutableStore.push(item);
+          this.gridApi.setRowData(rowImmutableStore);
+        }
+      });
+    } else if (this.dateBox) {
+      this.rowImmutableStore.filter((item: any) => {
+        console.log(moment(item.Date, "YYYY/MM/DD").isBefore(moment(this.dateBox, "YYYY/MM/DD")), this.dateBox, item.Date)
+        if (moment(item.Date).isSameOrBefore(moment(this.dateBox))) {
+          rowImmutableStore.push(item);
+          this.gridApi.setRowData(rowImmutableStore);
+        }
+      });
+    }
     // else {
     this.gridApi.setQuickFilter(
       this.searchBox
