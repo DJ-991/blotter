@@ -159,7 +159,7 @@ export class AppComponent {
 
 
     newItem[field!] = event.newValue;
-    console.log('onCellEditRequest, updating ' + field + ' to ' + newValue);
+    console.log('onCellEditRequest, updating ' + field + ' to 00' + newValue);
     this.rowImmutableStore = this.rowImmutableStore.map((oldItem: any) =>
       oldItem.id == newItem.id ? newItem : oldItem
     );
