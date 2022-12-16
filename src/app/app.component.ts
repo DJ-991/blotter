@@ -13,6 +13,7 @@ import {
 } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import * as moment from 'moment';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -23,6 +24,31 @@ export class AppComponent {
   private gridApi!: GridApi;
   rowImmutableStore: any = [];
   public getRowId: GetRowIdFunc = (params: GetRowIdParams) => params.data.id;
+
+
+  dropDownList: any = [
+    {
+      name: 'USD',
+      disable: false,
+    },
+    {
+      name: 'EUR',
+      disable: false,
+    },
+    {
+      name: 'GBP',
+      disable: false,
+    },
+    {
+      name: 'AUD',
+      disable: false,
+    },
+  ];
+
+  selectedCCY1: any = 'select';
+  selectedCCY2: any = 'select';
+  searchBox: any = null;
+  dateBox: any = null;
 
 
   title = 'blott';
@@ -37,7 +63,7 @@ export class AppComponent {
       Sell_Offer: 0,
       Buy_Deal: 0,
       Sell_Deal: 0,
-      Date: '14-12-2022',
+      Date: new Date("2022-12-5").toLocaleDateString("en-US"),
     },
     {
       id: 2,
@@ -49,7 +75,7 @@ export class AppComponent {
       Sell_Offer: 0,
       Buy_Deal: 0,
       Sell_Deal: 0,
-      Date: '14-12-2022',
+      Date: new Date("2022-12-10").toLocaleDateString("en-US"),
     },
     {
       id: 3,
@@ -61,7 +87,7 @@ export class AppComponent {
       Sell_Offer: 0,
       Buy_Deal: 0,
       Sell_Deal: 0,
-      Date: '14-12-2022',
+      Date: new Date("2022-12-15").toLocaleDateString("en-US"),
     },
     {
       id: 4,
@@ -73,7 +99,7 @@ export class AppComponent {
       Sell_Offer: 0,
       Buy_Deal: 0,
       Sell_Deal: 0,
-      Date: '14-12-2022',
+      Date: new Date("2022-12-16").toLocaleDateString("en-US"),
     },
   ];
 
@@ -104,12 +130,21 @@ export class AppComponent {
     },
   ];
 
+  constructor() {
+
+  }
+
+
+  ngOnInit() {
+
+  }
+
   /** Export data in excel */
   onBtExport() {
     const params = {
       columnGroups: true,
       allColumns: true,
-      fileName: 'filename_of_your_choice',
+      fileName: 'CCY_pair',
     };
     this.gridApi.exportDataAsCsv(params);
   }
@@ -128,8 +163,20 @@ export class AppComponent {
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
-    this.rowData = this.rowData;
-    this.rowImmutableStore = this.rowData;
+
+    this.rowImmutableStore = this.getDataFromLocalStorage();
+
+    if (this.rowImmutableStore.length == 0) {
+      this.rowData = this.rowData;
+      this.rowImmutableStore = this.rowData;
+      localStorage.setItem('ag-grid-data', JSON.stringify(this.rowData));
+      this.rowImmutableStore = this.getDataFromLocalStorage();
+    } else {
+      this.rowImmutableStore = this.getDataFromLocalStorage();
+      this.rowData = this.rowImmutableStore;
+
+    }
+
   }
 
   onCellValueChanged(event: CellValueChangedEvent) {
@@ -164,5 +211,144 @@ export class AppComponent {
       oldItem.id == newItem.id ? newItem : oldItem
     );
     this.gridApi.setRowData(this.rowImmutableStore);
+
+    localStorage.setItem('ag-grid-data', JSON.stringify(this.rowImmutableStore));
+    this.rowImmutableStore = this.getDataFromLocalStorage();
+    this.rowData = this.rowImmutableStore;
+  }
+
+
+  /** Change event */
+  onChange($event: any, type: any) {
+    this.dropDownList = this.dropDownList.map((item: any) => {
+      if (item.name == $event.target.value) {
+        item.disable = true;
+      } else if (this.selectedCCY1 != item.name || this.selectedCCY2 != item.name) {
+        item.disable = false;
+      }
+      return item;
+    });
+  }
+
+  /** Add new record */
+  addNewRecord() {
+
+    if (this.selectedCCY1 != 'select' && this.selectedCCY2 != 'select') {
+      let s4 = () => {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+      }
+
+      const obj = {
+        id: s4(),
+        CCY1: this.selectedCCY1,
+        CCY2: this.selectedCCY2,
+        Buy_Rate: 0,
+        Sell_Rate: 0,
+        Buy_Offer: 0,
+        Sell_Offer: 0,
+        Buy_Deal: 0,
+        Sell_Deal: 0,
+        Date: new Date().toLocaleDateString("en-US"),
+      }
+
+      this.rowImmutableStore.push(obj);
+      this.gridApi.setRowData(this.rowImmutableStore);
+      this.resetAddForm();
+
+      localStorage.setItem('ag-grid-data', JSON.stringify(this.rowImmutableStore));
+      this.rowImmutableStore = this.getDataFromLocalStorage();
+      this.rowData = this.rowImmutableStore;
+    } else {
+      window.alert("Please select CCY Pair");
+    }
+
+
+  }
+
+  /** Reset form */
+  resetAddForm() {
+    this.selectedCCY1 = 'select';
+    this.selectedCCY2 = 'select';
+    this.dropDownList = this.dropDownList.map((item: any) => {
+      item.disable = false;
+      return item;
+    });
+  }
+
+  /** Reset selected input */
+  resetSelectedInput() {
+    this.resetAddForm();
+  }
+
+  /** When no text in input box */
+  onFilterTextBoxChanged() {
+    if (this.searchBox == null) {
+      this.gridApi.setQuickFilter(this.searchBox);
+    }
+  }
+
+  /** When no Date in input box */
+  onFilterDateBoxChanged() {
+    if (this.dateBox == null) {
+      this.gridApi.setQuickFilter(this.dateBox);
+    }
+  }
+
+  /** When click on go filter */
+  ongoFilter() {
+    var rowImmutableStore: any = []
+
+    // if (this.dateBox && this.searchBox) {
+    //   this.rowImmutableStore.filter((item: any) => {
+    //     if (moment(item.Date, "YYYY/MM/DD").isBefore(moment()) || moment(item.Date, 'YYYY-MM-DD').format('YYYY-MM-DD') == moment(new Date(), 'YYYY-MM-DD').format('YYYY-MM-DD')) {
+    //       rowImmutableStore.push(item);
+    //       this.gridApi.setRowData(rowImmutableStore);
+    //     }
+    //   });
+    // } else if (this.dateBox) {
+    //   this.rowImmutableStore.filter((item: any) => {
+    //     let format: any = new Date(item.Date)
+    //     format = moment(format, 'YYYY/MM/DD').format('YYYY/MM/DD');
+    //     let todayDate: any = new Date()
+    //     todayDate = moment(todayDate, 'YYYY/MM/DD').format('YYYY/MM/DD');
+    //     if (format < todayDate) {
+    //       console.log(item);
+    //       rowImmutableStore.push(item);
+    //       // this.gridApi.setRowData(rowImmutableStore);
+    //     }
+    //   });
+    // }
+    // else {
+    this.gridApi.setQuickFilter(
+      this.searchBox
+    );
+    // }
+  }
+
+  /** Reset form */
+  resetSearchForm() {
+    this.dateBox = null;
+    this.searchBox = null;
+    this.gridApi.setRowData(this.rowImmutableStore);
+    this.gridApi.setQuickFilter(this.searchBox);
+  }
+
+
+  /** Set data in local storage */
+  setDataInLocalStorage() {
+
+  }
+
+
+  /** Get data from localStorage */
+  getDataFromLocalStorage() {
+    if (localStorage.getItem('ag-grid-data') === null) {
+      this.rowImmutableStore = [];
+    } else {
+      this.rowImmutableStore = JSON.parse(localStorage.getItem('ag-grid-data') || '');
+    }
+    return this.rowImmutableStore;
   }
 }

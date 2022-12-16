@@ -6,69 +6,66 @@
 	</div>
 </nav>
 
-<div class="container text-center">
-	<div class="row">
-		<div class="col">
-			<br />
-			<br />
-			<form class="d-flex" role="search">
-				<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-				<button class="btn btn-outline-success" type="submit">
-					Find
-				</button>
-			</form>
-		</div>
-		<div class="col">
-			<br />
-			<br />
-			<button type="button" class="btn btn-light">
-				Go
-			</button>
-		</div>
-		<div class="col">
-			<br />
-			<div>
-				Select the CCY Pair:
-			</div>
-			<div class="dropdown">
-				<button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-					CCY1
-				</button>
-				<ul class="dropdown-menu">
-					<li><button class="dropdown-item" type="button">USD</button></li>
-					<li><button class="dropdown-item" type="button">EUR</button></li>
-					<li><button class="dropdown-item" type="button">GBP</button></li>
-					<li><button class="dropdown-item" type="button">AUD</button></li>
-				</ul>
-			</div>
-		</div>
-		<div class="col">
-			<br />
-			<br />
-			<div class="dropdown">
-				<button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-					CCY2
-				</button>
-				<ul class="dropdown-menu">
-					<li><button class="dropdown-item" type="button">USD</button></li>
-					<li><button class="dropdown-item" type="button">EUR</button></li>
-					<li><button class="dropdown-item" type="button">GBP</button></li>
-					<li><button class="dropdown-item" type="button">AUD</button></li>
-				</ul>
-			</div>
-		</div>
-		<div class="col">
-			<br />
-			<br />
-			<button type="button" class="btn btn-light">Add</button>
-		</div>
-	</div>
-</div>
+
 
 <!-- Body -->
 <div class="container-fluid">
 
-	<div class="row">
+	<div class="row mt-5">
+		<div class="col-md-6">
+			<p class="text-center">
+				Search:
+			</p>
+			<div class="row text-center">
+				<div class="col-md-4">
+					<input class="form-control" [(ngModel)]="searchBox" name="searchBox" id="filter-text-box"
+						type="text" placeholder="Enter value" (input)="onFilterTextBoxChanged()"
+						aria-label="default input example">
+				</div>
+				<div class="col-md-4">
+					<input class="form-control" [(ngModel)]="dateBox" name="dateBox" type="date"
+						(input)="onFilterDateBoxChanged()" id="datePicker" placeholder="Default input"
+						aria-label="default input example">
+				</div>
+				<div class="col-md-4">
+					<button type="submit" class="btn btn-success me-3" (click)="ongoFilter()">Go</button>
+					<button type="submit" (click)="resetSearchForm()" class="btn btn-danger">Reset</button>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="col-md-6">
+			<p class="text-center">
+				Select the CCY Pair:
+			</p>
+			<div class="row text-center">
+				<div class="col-md-4">
+					<select class="form-select" aria-label="Default select example" [(ngModel)]="selectedCCY1"
+						name="selectedCCY1" (change)="onChange($event,'first')">
+						<option selected>select</option>
+						<option [value]="i.name" [disabled]="i.disable" *ngFor="let i of dropDownList">{{i.name}}
+						</option>
+					</select>
+
+				</div>
+				<div class="col-md-4">
+					<select class="form-select" aria-label="Default select example" [(ngModel)]="selectedCCY2"
+						name="selectedCCY2" (change)="onChange($event,'second')">
+						<option selected>select</option>
+						<option [value]="i.name" [disabled]="i.disable" *ngFor="let i of dropDownList">{{i.name}}
+						</option>
+					</select>
+				</div>
+				<div class="col-md-4">
+					<button type="submit" (click)="addNewRecord()" class="btn btn-success me-3">Add</button>
+					<button type="submit" (click)="resetSelectedInput()" class="btn btn-danger">Reset</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row mt-5">
 		<div class="col-md-12">
 			<div class="d-flex justify-content-end">
 				<button (click)="onBtExport()" type="submit" class="btn btn-outline-success">
@@ -79,7 +76,7 @@
 	</div>
 
 	<br />
-	<ag-grid-angular style="width: 100%; height: 250px" class="ag-theme-alpine" [rowData]="rowData"
+	<ag-grid-angular style="width: 100%; height: 400px" class="ag-theme-alpine" [rowData]="rowData"
 		(cellValueChanged)="onCellValueChanged($event)" [getRowId]="getRowId" [readOnlyEdit]="true"
 		(cellEditRequest)="onCellEditRequest($event)" [columnDefs]="colDefs" [excelStyles]="excelStyles"
 		(gridReady)="onGridReady($event)"></ag-grid-angular>
