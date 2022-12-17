@@ -29,6 +29,11 @@ export class AppComponent {
   noRowsTemplate: any
   loadingTemplate: any;
 
+  public overlayLoadingTemplate =
+    '<span class="ag-overlay-loading-center">No records found!</span>';
+  public overlayNoRowsTemplate =
+    '<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow;">This is a custom \'no rows\' overlay</span>';
+
   dropDownList: any = [
     {
       name: 'USD',
@@ -52,6 +57,7 @@ export class AppComponent {
   selectedCCY2: any = 'select';
   searchBox: any = null;
   dateBox: any = null;
+
 
   title = 'blott';
   rowData: any[] = [
@@ -338,15 +344,23 @@ export class AppComponent {
       this.gridApi.setQuickFilter(
         this.searchBox
       );
-
       if (this.gridApi.getDisplayedRowCount() == 0) {
-        this.gridApi.setRowData(rowImmutableStore);
-
+        // this.gridApi.setRowData(rowImmutableStore);
+        this.gridApi.showLoadingOverlay();
+      } else {
+        this.gridApi.hideOverlay();
+        this.exportButton = false;
       }
     }
 
+    console.log(this.gridApi.getDisplayedRowCount());
+
     if (this.gridApi.getDisplayedRowCount() == 0) {
+      this.gridApi.showLoadingOverlay();
       this.exportButton = true;
+    } else {
+      this.gridApi.hideOverlay();
+      this.exportButton = false;
     }
 
   }
@@ -392,5 +406,17 @@ export class AppComponent {
         this.dateValue = true;
       }
     }
+  }
+
+  onBtShowLoading() {
+    this.gridApi.showLoadingOverlay();
+  }
+
+  onBtShowNoRows() {
+    this.gridApi.showNoRowsOverlay();
+  }
+
+  onBtHide() {
+    this.gridApi.hideOverlay();
   }
 }

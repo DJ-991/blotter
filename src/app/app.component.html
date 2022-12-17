@@ -87,7 +87,8 @@
 	<ag-grid-angular style="width: 100%; height: 400px" class="ag-theme-alpine" [rowData]="rowData"
 		(cellValueChanged)="onCellValueChanged($event)" [getRowId]="getRowId" [readOnlyEdit]="true"
 		(cellEditRequest)="onCellEditRequest($event)" [columnDefs]="colDefs" [excelStyles]="excelStyles"
-		(gridReady)="onGridReady($event)"></ag-grid-angular>
+		(gridReady)="onGridReady($event)" [overlayLoadingTemplate]="overlayLoadingTemplate"
+		[overlayNoRowsTemplate]="overlayNoRowsTemplate"></ag-grid-angular>
 </div>
 
 <!-- Body -->
