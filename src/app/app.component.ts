@@ -25,6 +25,9 @@ export class AppComponent {
   public getRowId: GetRowIdFunc = (params: GetRowIdParams) => params.data.id;
   searchValue: boolean = true;
   dateValue: boolean = true;
+  exportButton: boolean = false;
+  noRowsTemplate: any
+  loadingTemplate: any;
 
   dropDownList: any = [
     {
@@ -142,7 +145,12 @@ export class AppComponent {
     },
   ];
 
-  constructor() { }
+  constructor() {
+    this.loadingTemplate =
+      `<span class="ag-overlay-loading-center">data is loading...</span>`;
+    this.noRowsTemplate =
+      `"<span">no rows to show</span>"`;
+  }
 
   ngOnInit() { }
 
@@ -170,9 +178,7 @@ export class AppComponent {
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
-
     this.rowImmutableStore = this.getDataFromLocalStorage();
-
     if (this.rowImmutableStore.length == 0) {
       this.rowData = this.rowData;
       this.rowImmutableStore = this.rowData;
@@ -328,12 +334,21 @@ export class AppComponent {
         }
       });
     }
-    // else {
-    this.gridApi.setQuickFilter(
-      this.searchBox
-    );
-    // this.gridApi.setRowData(rowImmutableStore);
-    // }
+    else {
+      this.gridApi.setQuickFilter(
+        this.searchBox
+      );
+
+      if (this.gridApi.getDisplayedRowCount() == 0) {
+        this.gridApi.setRowData(rowImmutableStore);
+
+      }
+    }
+
+    if (this.gridApi.getDisplayedRowCount() == 0) {
+      this.exportButton = true;
+    }
+
   }
 
   /** Reset form */
@@ -342,6 +357,7 @@ export class AppComponent {
     this.searchBox = null;
     this.searchValue = true;
     this.dateValue = true;
+    this.exportButton = false;
     this.gridApi.setRowData(this.rowImmutableStore);
     this.gridApi.setQuickFilter(this.searchBox);
   }
