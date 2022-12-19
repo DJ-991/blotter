@@ -398,12 +398,14 @@ export class AppComponent {
         this.searchValue = false;
       } else {
         this.searchValue = true;
+        this.resetSearchForm();
       }
     } else {
       if (searchValue) {
         this.dateValue = false;
       } else {
         this.dateValue = true;
+        this.resetSearchForm();
       }
     }
   }
